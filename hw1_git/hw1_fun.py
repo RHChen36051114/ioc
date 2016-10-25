@@ -69,29 +69,24 @@ def getLocInfo (data, uid) :
 	return locCount
 
 
+# (*** function used only in method 1 ***)
+# compare all pairs of user, according their "check-in times" & "location match times"
+# to judge whether they are friends or not
+def compare (uid, locCount, matchLimit) :
+	friendship = []
+	matchNum = 0
 
+	for x in range(len(uid)) :
+		for y in range(len(uid)) :
+			if x == y :
+				continue
 
+			# compare a pair of user's check-in location match number
+			matchSet = set(locCount[uid[x]].keys()) & set(locCount[uid[y]].keys())
+			matchNum = len(matchSet)
 
+			if matchNum > matchLimit :
+				friendship.append([uid[x], uid[y]])
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	return friendship
 

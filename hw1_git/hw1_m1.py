@@ -25,6 +25,9 @@ locCount = hw1_fun.getLocInfo (data, uid)
 
 	#print (locCount)
 
+# judge two user as friends if they check-in in the same place over matchLimit times
+friendship = hw1_fun.compare (uid, locCount, 0)
+
+	#print (friendship)
 
 
-	
