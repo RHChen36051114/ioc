@@ -69,6 +69,39 @@ def getLocInfo (data, uid) :
 	return locCount
 
 
+# write list into file
+def writeFile (friendship, filename) :
+	f = open (filename, "w")
+
+	for x in range(len(friendship)) :
+		if x == len(friendship)-1 :
+			f.write (str(friendship[x][0]))
+			f.write ('\t')
+			f.write (str(friendship[x][1]))
+			break
+
+		f.write (str(friendship[x][0]))
+		f.write ('\t')
+		f.write (str(friendship[x][1]))
+		f.write ('\n')
+
+	f.close()
+
+
+# reduce check-in location, if location counts < checkinLimit then remove from locCount
+def reduceLocCount (uid, locCount, checkinLimit) :
+	locCopy = locCount.copy()
+
+	for x in range(len(locCopy)) :
+		locTmp = locCopy[uid[x]].keys()
+
+		for y in range(len(locTmp)) :
+			if locCopy[uid[x]][locTmp[y]] < checkinLimit :
+				del locCopy[uid[x]][locTmp[y]]
+
+	return locCopy
+
+
 # (*** function used only in method 1 ***)
 # compare all pairs of user, according their "check-in times" & "location match times"
 # to judge whether they are friends or not
