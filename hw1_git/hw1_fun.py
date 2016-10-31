@@ -4,12 +4,16 @@ import sys
 # use to read and process check-in data format
 import csv
 
+# use to calculate distance from latitude & longitude
+from math import cos, sin, acos
+
+
 
 # check if user enter input file name
 def argCheck () :
     if len(sys.argv) != 2 :
-        print ('Argument error!')
-        sys.exit ()
+		print ('\n\tUsage :\tpython\t'+sys.argv[0]+'\t(input check-in data)')
+		sys.exit()
 
 
 # read in csv file and return data list
@@ -23,6 +27,7 @@ def readFile (filename) :
     return data
 
 
+
 # extract uid data from whole data list (no repeat)
 def getUID (data) :
     cnt = 1
@@ -31,7 +36,7 @@ def getUID (data) :
     for x in range(len(data)) :
         if x == 0 :
             continue
-        
+ 
         if uid[cnt-1] == data[x][0] :
             continue
         else :
@@ -39,6 +44,48 @@ def getUID (data) :
             cnt = cnt + 1
 
     return uid
+
+
+
+# decompose datetime column data from string to 5 parts int list
+# ex. '2010-10-20T12:08:15Z'  =>  2010, 10, 20, 12, 08, 15
+def decomposeDT (data) :
+	dt = []
+
+	for x in range(len(data)) :
+		tmpA = data[x][1][:len(data[x][1])-1]	# remove 'Z'
+		tmpB = tmpA.split('T')
+		tmpC = tmpB[0].split('-') + tmpB[1].split(':')
+		tmpD = [int(tmpC[0]), int(tmpC[1]), int(tmpC[2]), int(tmpC[3]), int(tmpC[4]), int(tmpC[5])]
+		dt.append (tmpD)
+
+	return dt
+
+
+
+# calculate distance of two place by latitude & longitude, 3 functions
+# just output kilogram version
+pi = 3.14159265358979323846
+
+def deg2rad (deg) :
+	return deg * pi / 180
+
+def rad2deg (rad) :
+	return rad * 180 / pi
+
+def distance (lat1, lon1, lat2, lon2) :
+	theta = lon1 - lon2
+
+	dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
+	dist = acos(dist)
+	dist = rad2deg(dist)
+	dist = dist * 60 * 1.1515
+
+	# transform dist from mile to kilogram
+	dist = dist * 1.609344
+
+	return dist
+
 
 
 # extract location data (no repeat) and it's count
@@ -69,6 +116,7 @@ def getLocInfo (data, uid) :
 	return locCount
 
 
+
 # write list into file
 def writeFile (friendship, filename) :
 	f = open (filename, "w")
@@ -88,6 +136,7 @@ def writeFile (friendship, filename) :
 	f.close()
 
 
+
 # reduce check-in location, if location counts < checkinLimit then remove from locCount
 def reduceLocCount (uid, locCount, checkinLimit) :
 	locCopy = locCount.copy()
@@ -100,6 +149,7 @@ def reduceLocCount (uid, locCount, checkinLimit) :
 				del locCopy[uid[x]][locTmp[y]]
 
 	return locCopy
+
 
 
 # (*** function used only in method 1 ***)
