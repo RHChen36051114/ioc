@@ -41,7 +41,7 @@ print ('Process location : %f' % (timeEndgetLocinfo-timeEndgetuid))
 
 
 # filter check-in counts lower than checkinLimit
-locReduce = hw1_fun.reduceLocCount (uid, locCount, 3)
+locReduce = hw1_fun.reduceLocCount (uid, locCount, 1)
 
 
 timeEndReduce = time.time()
@@ -49,7 +49,7 @@ print ('Reduce locCount : %f' % (timeEndReduce-timeEndgetLocinfo))
 
 
 # judge two user as friends if they check-in in the same place over matchLimit times
-friendship = hw1_fun.compare (uid, locReduce, 1)
+friendship = hw1_fun.compare (uid, locReduce, 9)
 
 
 timeEndCompare = time.time()

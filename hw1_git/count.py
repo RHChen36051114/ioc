@@ -1,4 +1,6 @@
-input = open ('method1.txt', 'r')
+import sys
+
+input = open (sys.argv[1], 'r')
 
 cnt = 0
 

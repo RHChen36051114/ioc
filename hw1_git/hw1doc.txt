@@ -1,0 +1,50 @@
+<Function>
+
+
+argCheck ( void )
+... void
+
+
+readFile ( string (file name) )
+... return ( list )
+
+
+getUID ( read-in data (form => dict : dict) )
+... return ( list )
+
+
+getLoc ( data )
+... return ( list )
+
+
+decomposeDT ( data )
+... return ( list )
+
+
+---	deg2rad ( float (deg) ) ... return ( float )
+|
+|--	rad2deg ( float (rad) ) ... return ( float )
+|
+---	distance ( float (lat1), float (lon1), float (lat2), float (lon2) )
+	... return ( float )
+
+
+getLocInfo ( data, list (uid) )
+... return ( dict )
+
+
+		  --- reduceLocCount ( list (uid), dict (locCount), int (checkinLimit) )
+		  |
+method1 --|-- compare ( list (uid), dict (locCount), int (matchLimit) )
+		  |
+		  ---
+
+
+locVisit ( list (loc), list (data) )
+... return ( dict )
+
+
+writeFile ( list (friendship), string (filename) )
+... void
+
+

@@ -4,7 +4,7 @@ import sys
 # use to read and process check-in data format
 import csv
 
-# use to calculate distance from latitude & longitude
+# use to calculate distance with latitude & longitude
 from math import cos, sin, acos
 
 
@@ -41,10 +41,34 @@ def getUID (data) :
             continue
         else :
             uid.append(data[x][0])
-            cnt = cnt + 1
+            cnt += 1
 
     return uid
 
+
+
+# extract location data from whole data list (no repeat)
+def getLoc (data) :
+	loctmp = []
+	
+	for x in data :
+		loctmp.append (x[4])
+
+	loc = set(loctmp)
+	loc = list (loc)
+	loc = sorted (loc)
+
+	return loc
+
+
+# store dict about location ID to lati & lonti
+def tableLoc (data) :
+	table = {}
+	for x in data :
+		if x[4] in table : continue
+		table[x[4]] = (x[2],x[3])
+	
+	return table
 
 
 # decompose datetime column data from string to 5 parts int list
@@ -172,4 +196,45 @@ def compare (uid, locCount, matchLimit) :
 				friendship.append([uid[x], uid[y]])
 
 	return friendship
+
+
+
+# store location and it's visitor
+def locVisit (loc, data) :
+	lv = {}
+
+	# initialize lv[loc] dic
+	for x in loc :
+		lv[x] = {}
+
+	for x in range(len(data)) :
+		if data[x][0] not in lv[data[x][4]].keys() :
+			lv[data[x][4]][data[x][0]] = 1
+		else :
+			lv[data[x][4]][data[x][0]] += 1
+
+	return lv
+
+
+
+# union two friendship list
+def union (data1, data2) :
+	tmp1=[]
+	tmp2=[]
+	out=[]
+	uni=[]
+
+	for x in data1 :
+		tmp1.append(str(x[0])+'+'+str(x[1]))
+	
+	for x in data2 :
+		tmp2.append(str(x[0])+'+'+str(x[1]))
+
+	out = tmp1 + tmp2
+	out = list(set(out))
+
+	for x in range(len(out)) :
+		uni.append(out[x].split("+"))
+
+	return uni
 
